@@ -1,0 +1,140 @@
+
+var placement = "";
+
+window.grumi = {
+	cfg: {},
+	key: '5595447e-ba2d-4ecf-a980-c166d7c68d62'
+};
+(function () {
+	var s = document.createElement('script');
+	s.src = '//rumcdn.geoedge.be/pbjs-wrapper.js';
+	var s0 = document.getElementsByTagName('script')[0];
+	s0.parentNode.insertBefore(s, s0);
+})();
+
+(function () {
+    var gads = document.createElement('script');
+    gads.async = true;
+    gads.type = 'text/javascript';
+    gads.src = "//cdn.insideall.com/moneytag/prebid.js";
+    var node = document.getElementsByTagName('script')[0];
+    node.parentNode.insertBefore(gads, node);
+})();
+
+var requestURL = document.getElementById("iall").getAttribute("src");
+var queryString = requestURL.substring(requestURL.indexOf("?") + 1, requestURL.length);
+var params = queryString.split("&");
+for(var i = 0; i < params.length; i++){
+    var key = params[i].substring(0,params[i].indexOf("="));
+    var value = params[i].substring(params[i].indexOf("=") + 1, params[i].length);
+    if (key == "placement")
+    {
+       placement = value;
+	}
+};
+
+
+inventorySizes = function(){
+	if (navigator.userAgent.match(/(Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini)/gi)) {
+		if ( ((screen.width  >= 480) && (screen.height >= 800)) || ((screen.width  >= 800) && (screen.height >= 480)) || navigator.userAgent.match(/ipad/gi) ) {
+			return [[728,90]];
+		} else {
+			return [[320,50]];;
+		}
+	} else {
+		return [[728,90]];
+	}
+}
+
+
+
+var adUnits = [];
+
+if (placement == "FR_EI_TéléchargerUneVideo-ROS-MEGABANNER")
+{
+	adUnits.push(
+		{
+		    code: "postbid_iframe",
+		    "mediaTypes": {
+		        "banner": {
+		            sizes: inventorySizes()
+		        }
+		    },
+		    bids: [
+		    	{
+		            bidder: "appnexus",
+		            params: {
+		                placementId: "9499926"
+		            }
+		        },
+		        {
+		            bidder: "smartadserver",
+		            params: {
+		                domain: "//prg.smartadserver.com",
+		                siteId: "205497",
+		                pageId: "930808",
+		                formatId: "65591"
+		            }
+		        },
+		        {
+		        	bidder: "improvedigital",
+		        	params: {
+		        		placementId : "1214839"
+		        	}
+		        },
+		        {
+		            bidder: "adux",
+		            params: {
+		                placement: "14148385"
+		            }
+		        }
+		    ]
+		}
+	);
+}
+
+	PREBID_TIMEOUT = 2000;
+    
+    var pbjs = pbjs || {};
+    pbjs.que = pbjs.que || [];
+    
+    pbjs.que.push(function() {
+		pbjs.aliasBidder('appnexus', 'adux');
+        pbjs.addAdUnits(adUnits);
+        pbjs.requestBids({
+            timeout: PREBID_TIMEOUT,
+            bidsBackHandler: function(b) {
+            	var bid = pbjs.getHighestCpmBids("postbid_iframe")[0];
+            	var i = document.createElement('iframe');
+				i.id = "postbid_iframe";
+				i.style.width = bid.width;
+				i.style.height = bid.height;
+				i.style.border = 0;
+				i.setAttribute('marginheight', '0');
+				i.setAttribute('marginwidth', '0');
+				i.scrolling='no';
+				i.frameborder= 'no';
+				i.style.overflow = 'hidden';
+				document.getElementById("googlead").setAttribute('style', 'text-align: center');
+				document.getElementById("googlead").appendChild(i);
+                var iframe = document.getElementById('postbid_iframe');
+                var iframeDoc = iframe.contentWindow.document;
+                var adServerTargeting = pbjs.getAdserverTargetingForAdUnitCode('postbid_iframe');
+
+                // If any bidders return any creatives
+                if (adServerTargeting && adServerTargeting['hb_adid']) {
+                    pbjs.renderAd(iframeDoc, adServerTargeting['hb_adid']);
+                } else {
+                    iframe.width = adUnitSizes[0][0];
+                    iframe.height = adUnitSizes[0][1];
+                    iframeDoc.write(passbackTagHtml);
+                    iframeDoc.close();
+                }
+            }
+        });
+    });
+
+    // Define the passback HTML tag here.
+    // Note that this tag is usually in either Script tag form or iFrame form. For example:
+    var passbackTagHtml = 'TO ADD';
+

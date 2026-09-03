@@ -1,0 +1,1 @@
+window.AKSdk = {init: function(t, o) { o && o.on_init_error && o.on_init_error("closed_country"); } };
